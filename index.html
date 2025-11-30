@@ -3,240 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Converter Mini Project</title>
-    
-    <style>
-        :root {
-            --primary-color: #33aaff; /* Light Blue */
-            --secondary-color: #007bb3;
-            --background-light: #f7f9fc;
-            --text-dark: #333;
-            --white: #fff;
-            --shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background-color: var(--background-light);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 25px;
-            font-size: 2em;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        label {
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        input[type="number"],
-        select {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-            width: 100%;
-            transition: border-color 0.3s;
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            border-color: var(--primary-color);
-            outline: none;
-        }
-
-        .conversion-flow {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .conversion-flow .input-group {
-            flex-basis: 45%; /* Give inputs space */
-            margin-bottom: 0;
-        }
-
-        .exchange-icon {
-            font-size: 2.5em;
-            color: var(--secondary-color);
-            user-select: none;
-            flex-shrink: 0;
-        }
-
-        #convertBtn {
-            background-color: var(--primary-color);
-            color: var(--white);
-            border: none;
-            padding: 15px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        #convertBtn:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .result-box {
-            margin-top: 30px;
-            padding: 15px;
-            border: 2px solid var(--primary-color);
-            border-radius: 8px;
-        }
-
-        #resultText {
-            font-size: 1.6em;
-            font-weight: bold;
-            color: var(--text-dark);
-            word-wrap: break-word;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 500px) {
-            .container {
-                padding: 20px;
-            }
-            .conversion-flow {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .conversion-flow .input-group {
-                flex-basis: 100%;
-            }
-            .exchange-icon {
-                transform: rotate(90deg); /* Rotate the icon on smaller screens */
-                margin: 10px 0;
-            }
-        }
-    </style>
+    <title>Vehicle Details SPA</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>💲 Currency Converter </h1>
+    <header>
+        <h1>🚗 Vehicle Details Hub</h1>
+        <nav>
+            <a href="#" data-page="home" class="active">Home</a>
+            <a href="#" data-page="contact">Contact Us</a>
+        </nav>
+    </header>
 
-        <div class="input-group">
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" value="100" min="0">
-        </div>
+    <main id="content-area" class="container">
+        <h2>Loading...</h2>
+    </main>
 
-        <div class="conversion-flow">
-            <div class="input-group">
-                <label for="fromCurrency">From:</label>
-                <select id="fromCurrency">
-                    <option value="USD" selected>USD - US Dollar</option>
-                    <option value="EUR">EUR - Euro</option>
-                    <option value="GBP">GBP - British Pound</option>
-                    <option value="INR">INR - Indian Rupee</option>
-                    <option value="JPY">JPY - Japanese Yen</option>
-                </select>
-            </div>
-            
-            <div class="exchange-icon">⇄</div> 
+    <footer>
+        <p>&copy; 2024 Vehicle Details Project</p>
+    </footer>
 
-            <div class="input-group">
-                <label for="toCurrency">To:</label>
-                <select id="toCurrency">
-                    <option value="EUR">EUR - Euro</option>
-                    <option value="USD">USD - US Dollar</option>
-                    <option value="GBP">GBP - British Pound</option>
-                    <option value="INR" selected>INR - Indian Rupee</option>
-                    <option value="JPY">JPY - Japanese Yen</option>
-                </select>
-            </div>
-        </div>
-
-        <button id="convertBtn">Convert</button>
-
-        <div class="result-box">
-            <p id="resultText">Enter values and click Convert.</p>
-        </div>
-    </div>
-
-    <script>
-        // Static exchange rates (USD is the base)
-        const exchangeRates = {
-            USD: 1.0,  
-            EUR: 0.92,
-            GBP: 0.79,
-            INR: 83.00,
-            JPY: 151.00
-        };
-
-        // Function to perform the currency conversion
-        function convertCurrency() {
-            // 1. Get values
-            const amountInput = document.getElementById('amount');
-            const fromCurrency = document.getElementById('fromCurrency').value;
-            const toCurrency = document.getElementById('toCurrency').value;
-            const resultText = document.getElementById('resultText');
-
-            const amount = parseFloat(amountInput.value);
-
-            // 2. Input Validation
-            if (isNaN(amount) || amount <= 0) {
-                resultText.textContent = "❌ Please enter a valid positive amount.";
-                resultText.style.color = "red";
-                return;
-            }
-
-            // 3. Conversion Logic
-            try {
-                // Convert 'From' amount to the common base (USD)
-                const amountInUSD = amount / exchangeRates[fromCurrency];
-                
-                // Convert USD amount to the 'To' currency
-                const convertedAmount = amountInUSD * exchangeRates[toCurrency];
-                
-                // 4. Display the result
-                const formattedAmount = convertedAmount.toFixed(2);
-                
-                resultText.textContent = `✅ ${amount} ${fromCurrency} = ${formattedAmount} ${toCurrency}`;
-                resultText.style.color = "#333"; // Reset color to dark text
-
-            } catch (error) {
-                resultText.textContent = "⚠️ Error: Currency code missing or invalid rate.";
-                resultText.style.color = "orange";
-            }
-        }
-
-        // Attach the function to the button when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            const convertBtn = document.getElementById('convertBtn');
-            convertBtn.addEventListener('click', convertCurrency);
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
